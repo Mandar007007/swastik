@@ -6,6 +6,9 @@ from langchain.vectorstores import FAISS
 import os
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
+from pymongo import MongoClient
+import pickle 
+from bson import ObjectId
 
 app = Flask(__name__)
 
@@ -16,8 +19,12 @@ def get_data():
 
 @app.route('/api/data/pdf',methods=['GET'])
 def get_pdf():
-    os.environ["OPENAI_API_KEY"] = "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"
-    
+    os.environ["OPENAI_API_KEY"] = "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"
+
+    client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
+    db = client['Swastik']
+    collection = db['speech']
+
     if 'file' not in request.files:
         return jsonify({'error':'invalid data'})
     
@@ -41,14 +48,44 @@ def get_pdf():
     embeddings = OpenAIEmbeddings()
 
     VectorStore = FAISS.from_texts(chunks, embedding=embeddings)
-    chain = load_qa_chain(OpenAI(),chain_type="stuff")
+    serialized_vector_store = pickle.dumps(VectorStore)
     
-    query = "give information about green evolution"
+    collection.insert_one({"vector_store_data": serialized_vector_store})
+
+    return jsonify({'message': 'successfully stored the data'})
+
+@app.route('/api/ask',methods=['POST'])
+def ask():
+    os.environ["OPENAI_API_KEY"] = "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"
+
+    data = request.json
+    client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
+    db = client['Swastik']
+    collection = db['speech']
+
+    data = request.json
+    user_id = data.get('id')
+    query = data.get('query')
+
+    object_id = ObjectId(user_id)
+    stored_data = collection.find_one({"_id": object_id}).get('vector_store_data')
+    VectorStore = pickle.loads(stored_data)
+
+    chain = load_qa_chain(OpenAI(),chain_type="stuff")
   
     docs = VectorStore.similarity_search(query)
-    message = chain.run(input_documents=docs,question=query)
+    message = chain.run(input_documents=docs,question=query)    
 
-    return jsonify({'message': message})
+    return jsonify({"message":message})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+    chain = load_qa_chain(OpenAI(),chain_type="stuff")
+    
+    query = "give information about the person"
+  
+    docs = VectorStore.similarity_search(query)
+    message = chain.run(input_documents=docs,question=query)
