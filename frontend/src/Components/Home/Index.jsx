@@ -176,8 +176,9 @@ const Index = () => {
             animate={controls1}
             variants={animationVariants}
           >
-            <Navbar />
+            
           </motion.div>
+          <Navbar />
           <Hero />
           <Features />
           <div className="mb-[100vh] h-[10vh]"></div>

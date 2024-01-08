@@ -1,11 +1,13 @@
 import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function Navbar() {
+
+    const navigate = useNavigate();
 
     return (
         <>
                 <nav  data-scroll data-scroll-position="top" data-scroll-delay="0.06" data-scroll-speed="3"className=" bg-white border-gray-200 dark:bg-gray-900">
-                    <div class="absolute -inset-1 rounded-lg"></div>
                     <div className="relative">
                         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto lg:px-16 px-8 py-4">
                             <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
@@ -14,7 +16,7 @@ function Navbar() {
                             </a>
                             <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                                 <button class="inline-flex items-center justify-center p-0.5 overflow-hidden md:text-sm text-[12px] font-medium text-gray-900 group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
-                                    <span class="relative md:px-3 md:py-2.5 px-2 py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 group-hover:bg-opacity-0">
+                                    <span class="relative md:px-3 md:py-2.5 px-2 py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 group-hover:bg-opacity-0" onClick={() => {navigate('/signin')}}>
                                         Login/Register
                                     </span>
                                 </button>
