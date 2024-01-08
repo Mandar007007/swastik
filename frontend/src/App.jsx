@@ -4,12 +4,13 @@ import './index.css'
 import axios from 'axios'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import {useDispatch} from "react-redux"
+import { initFlowbite } from 'flowbite'
 
 function App() {
   const dispatch = useDispatch()
   const loadUser = async () => {
   try{
-    await axios.post("http://localhost:3000/api/v1/login",{email:'lakhatariyasandip99@gmail.com', password:'Password1234'},{
+    await axios.post("http://localhost:3000/api/v1/login",{email:'teamm2d007@gmail.com', password:'Password1234'},{
       headers: { 'Content-Type': 'application/json'},
       withCredentials: true
     })
@@ -32,6 +33,7 @@ function App() {
   }
 
   useEffect(() => {
+    initFlowbite();
     loadUser();
   },[])
 
