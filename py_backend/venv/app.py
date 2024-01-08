@@ -19,7 +19,7 @@ def get_data():
 
 @app.route('/api/data/pdf',methods=['GET'])
 def get_pdf():
-    os.environ["OPENAI_API_KEY"] = ""
+    os.environ["OPENAI_API_KEY"] = "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"
 
     client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
     db = client['Swastik']
@@ -56,7 +56,7 @@ def get_pdf():
 
 @app.route('/api/ask',methods=['POST'])
 def ask():
-    os.environ["OPENAI_API_KEY"] = ""
+    os.environ["OPENAI_API_KEY"] = "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"
 
     data = request.json
     client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
