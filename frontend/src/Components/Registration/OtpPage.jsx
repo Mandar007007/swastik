@@ -2,15 +2,66 @@ import { useRef, useState } from "react"
 import OtpInput from 'react-otp-input';
 import { useNavigate } from "react-router-dom"
 import Navbar from "../Navbar/Navbar";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
 
-function OtpPage(params) {
+function OtpPage() {
 
     const navigate = useNavigate();
     const [otp, setOtp] = useState();
+    const email = useSelector(state => state.user.toVerifyEmail)
+    const dispatch = useDispatch();
+
+    const handleSubmit = async () => {
+        try{
+            console.log(email)
+            const response = await axios.post("http://localhost:3000/api/v1/verify",{otp,email}, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            })
+
+            if(response.data.user)
+            {
+                if (response.data.user) {
+                    dispatch({ type: "SET_USER", payload: response.data.user });
+                } else {
+                    dispatch({ type: "CLEAR_USER" });
+                }
+                navigate('/')
+            }
+
+        }catch(e)
+        {
+            toast.error(`${e.response.data.message}`, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+            console.log(e)
+        }
+    }
 
     return (
         <>
             <Navbar />
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <div className="bg-gray-100 py-8">
                 <form method="POST">
                     <div className=" max-w-[450px] max-h-[1100px] mx-auto bg-white shadow-xl py-8 px-10 flex flex-col items-center justify-center">
@@ -39,7 +90,7 @@ function OtpPage(params) {
                             </div>
                         </div>
 
-                        <button type="button" className="text-white bg-gradient-to-br rounded-md from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium text-sm px-8 py-2 text-center">
+                        <button onClick={handleSubmit} type="button" className="text-white bg-gradient-to-br rounded-md from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium text-sm px-8 py-2 text-center">
                             Confirm
                         </button>
 

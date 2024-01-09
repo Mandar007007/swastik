@@ -1,6 +1,7 @@
 const intitalState = {
     user: null,
     isAuthenticated:false,
+    toVerifyEmail:null
   };
 
   const userReducer = (state = intitalState, action) => {
@@ -22,6 +23,11 @@ const intitalState = {
           ...state,
           prouser:action.payload
         };
+      case "SET_TO_VERIFY":
+        return {
+          ...state,
+          toVerifyEmail:action.payload
+        }
   
       default:
         return state;

@@ -71,8 +71,7 @@ def ask():
     stored_data = collection.find_one({"_id": object_id}).get('vector_store_data')
     VectorStore = pickle.loads(stored_data)
 
-    chain = load_qa_chain(OpenAI(),chain_type="stuff")
-  
+    chain = load_qa_chain(OpenAI(model="gpt-3.5-turbo-instruct"),chain_type="stuff")
     docs = VectorStore.similarity_search(query)
     message = chain.run(input_documents=docs,question=query)    
 
