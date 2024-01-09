@@ -70,7 +70,7 @@ function Features(params) {
           className="headings flex flex-col justify-center items-center w-full"
         >
           <h1 className=" text-[30px] font-semibold mt-16">Our Features</h1>
-          <h1 className=" text-[18px]">
+          <h1 className=" text-[18px] text-center">
             Swastik provide various features to make study easy.
           </h1>
         </motion.div>
