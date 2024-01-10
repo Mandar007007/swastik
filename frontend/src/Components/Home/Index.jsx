@@ -4,6 +4,8 @@ import Hero from "../Home/Hero";
 import Features from "./Features";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import Testimonials from "./Testimonials";
+import { initFlowbite } from "flowbite";
 
 const Index = () => {
   const [show, setShow] = useState(true);
@@ -14,6 +16,7 @@ const Index = () => {
   const controls1 = useAnimation();
 
   useEffect(() => {
+    initFlowbite();
     const scroll = new LocomotiveScroll({
       el: document.querySelector("#main"),
       smooth: true,
@@ -181,6 +184,7 @@ const Index = () => {
           <Navbar />
           <Hero />
           <Features />
+          <Testimonials />
           <div className="mb-[100vh] h-[10vh]"></div>
         </div>}
       </div>
