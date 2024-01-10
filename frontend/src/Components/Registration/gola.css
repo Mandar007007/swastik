@@ -1,0 +1,71 @@
+.gola1{
+    height:20vw;
+    width: 20vw;
+    background-color: rgb(233, 65, 3);
+    position: absolute;
+    border-radius: 50%;
+    left:30vh;
+    z-index: -1;
+    filter: blur(20px);
+    animation: anime2 5s linear 0.6s infinite alternate ;
+}
+
+.gola2{
+    height:20vw;
+    width: 20vw;
+    background-color: orangered;
+    position: absolute;
+    border-radius: 50%;
+    left:30vh;
+    z-index: -1;
+    filter: blur(20px);
+    animation: anime1 2s linear 0.6s infinite alternate ;
+}
+
+.gola3{
+    height:20vw;
+    width: 20vw;
+    background-color: rgb(233, 65, 3);
+    position: absolute;
+    border-radius: 50%;
+    right:30vh;
+    bottom: 0;
+    z-index: -1;
+    filter: blur(20px);
+    animation: anime2 5s linear 0.6s infinite alternate ;
+}
+
+.gola4{
+    height:20vw;
+    width: 20vw;
+    background-color: orangered;
+    position: absolute;
+    border-radius: 50%;
+    right:30vh;
+    bottom: 0;
+    z-index: -1;
+    filter: blur(20px);
+    animation: anime1 2s linear 0.6s infinite alternate ;
+}
+
+@keyframes anime1 {
+    0%{
+        transform: translate(-20%,-10%);
+    }
+    100%{
+        transform: translate(10%,20%);
+
+    }
+    
+}
+
+@keyframes anime2 {
+    0%{
+        transform: translate(-10%,-10%);
+    }
+    100%{
+        transform: translate(10%,10%);
+
+    }
+    
+}
