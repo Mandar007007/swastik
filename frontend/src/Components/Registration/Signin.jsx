@@ -6,6 +6,7 @@ import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
+import './gola.css'
 import 'react-toastify/dist/ReactToastify.css';
 
 function Signin(params) {
@@ -70,8 +71,8 @@ function Signin(params) {
                 pauseOnHover
                 theme="light"
             />
-            <div className="bg-gray-100 py-8">
-                <form method="POST">
+            <div className="bg-gray-100 py-8 ">
+                <form method="POST" className="">
                     <div className=" max-w-[800px] max-h-[1100px] sm:mx-auto mx-5 bg-white shadow-xl py-8 sm:px-20 px-10 sm:grid sm:grid-cols-7 grid-cols-1 justify-center">
                         <div className="profile grid col-start-1 col-end-4 sm:mr-10 justify-center">
                             <h1 className="sm:hidden text-center mb-5 text-[30px]">Welcome Back</h1>
