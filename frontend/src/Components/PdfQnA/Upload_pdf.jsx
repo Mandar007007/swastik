@@ -6,17 +6,19 @@ import { LuFileAudio2 } from "react-icons/lu";
 import { IoMicCircleOutline } from "react-icons/io5";
 import { Bars } from "react-loader-spinner";
 import Avatar from "react-avatar";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import { FaCheckCircle } from "react-icons/fa";
 
 function Upload_items({ type }) {
 
-    const [pdf_file, setPdfFile] = useState();
+    const [pdf_file, setPdfFile] = useState(null);
     const [audio_file, setAudioFile] = useState();
     const [isSpeaking, setIsSpeaking] = useState(false);
 
     const handlePdfFileChange = (e) => {
         const file = e.target.files[0];
         setPdfFile(file);
-        console.log(file);
     }
 
     const handleAudioFileChange = (e) => {
@@ -25,28 +27,88 @@ function Upload_items({ type }) {
         console.log(file);
     }
 
+
+    const handleSubmit = async () => {
+        try {
+            const sendPdf = async () => {
+                try {
+                    const formData = new FormData();
+                    formData.append('file', pdf_file);
+                    return await axios.post("http://localhost:5000/api/data/pdf", formData, {
+                        headers: { 'Content-Type': 'multipart/form-data', 'Access-Control-Allow-Origin': '*' },
+                        withCredentials: true
+                    });
+                } catch (e) {
+                    console.log(e);
+                    throw e; // rethrow the error so that the promise is rejected
+                }
+            };
+            toast.promise(
+                sendPdf(),
+                {
+                    pending: {
+                        render() {
+                            return (
+                                <div className="flex items-center">
+                                  <Bars height={20} width={30} color="#4F46E5" />
+                                  <span className="ml-2">Uploading...</span>
+                                </div>
+                              );
+                        },
+                        icon: false,
+                    },
+                    success: {
+                        render({ data }) {
+                            return (
+                                <div className="flex items-center">
+                                  <FaFilePdf
+                                    className="text-green-500 mr-2 animate__animated animate__rubberBand"
+                                    size={20}
+                                  />
+                                  <span>File successfully uploaded!</span>
+                                </div>
+                              );
+                        },
+                        
+                        
+                    },
+                    error: {
+                        render({ data }) {
+                            // When the promise rejects, data will contain the error
+                            return `Error: ${data.response.data.error}`;
+                        },
+                    },
+                }
+            );
+    
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     if (type == 'audio') {
         return (
             <div className="">
+                
                 <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-sm cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
 
                     {audio_file ? (
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <FaFilePdf className=" text-[40px] text-gray-500 mb-6" />
-                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">File: </span>{audio_file.name}</p>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">File: </span>{audio_file.name}</p>
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <MdCloudUpload className=" text-[50px] text-gray-500 mb-2" />
-                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">Audio File (max. size 1 MB)</p>
                         </div>
                     )}
 
-                    <input type="file" onChange={handleAudioFileChange} class="hidden" />
+                    <input type="file" onChange={handleAudioFileChange} className="hidden" />
                 </label>
                 <div className=" flex items-center justify-center">
-                    <button type="button" className=" mt-5 outline outline-blue-600 px-2 py-1 rounded-sm text-blue-400 hover:bg-blue-600 hover:text-white ">Submit</button>
+                    <button onClick={handleSubmit} type="button" className=" mt-5 outline outline-blue-600 px-2 py-1 rounded-sm text-blue-400 hover:bg-blue-600 hover:text-white ">Submitaa</button>
                 </div>
             </div>
         );
@@ -62,7 +124,7 @@ function Upload_items({ type }) {
                                 color="rgb(156 163 175)"
                                 ariaLabel="bars-loading"
                                 wrapperStyle={{}}
-                                wrapperClass=""
+                                wrapperclass=""
                                 visible={true}
                             />
                         <div className="">
@@ -96,7 +158,7 @@ function Upload_items({ type }) {
                 <input type="file" onChange={handlePdfFileChange} class="hidden" />
             </label>
             <div className=" flex items-center justify-center">
-                <button type="button" className=" mt-5 outline outline-blue-600 px-2 py-1 rounded-sm text-blue-400 hover:bg-blue-600 hover:text-white ">Submit</button>
+                <button onClick={handleSubmit} type="button" className=" mt-5 outline outline-blue-600 px-2 py-1 rounded-sm text-blue-400 hover:bg-blue-600 hover:text-white ">Submitab</button>
             </div>
         </div>
     );
@@ -138,7 +200,7 @@ function Upload_pdf(params) {
                                 style={{ display: "none" }}
                             />
                         </div>
-                        <button type="button" className=" mt-5 outline outline-gary-600 px-2 py-1 rounded-md text-slate-400 hover:bg-slate-400 hover:text-white ">Upload Event Logo</button>
+                        <button type="button" class=" mt-5 outline outline-gary-600 px-2 py-1 rounded-md text-slate-400 hover:bg-slate-400 hover:text-white ">Upload Event Logo</button>
                     </div>
 
 
@@ -194,13 +256,13 @@ function Upload_pdf(params) {
                                 value="pdf"
                                 checked={uploadType === "pdf"}
                                 onChange={() => { setUploadType('pdf') }}
-                                class="hidden peer"
+                                className="hidden peer"
                             />
-                            <label for="pdf_file" class="inline-flex items-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-sm cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                            <label htmlFor="pdf_file" className="inline-flex items-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-sm cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                                 <Avatar src="./src/assets/pdf.png" size="50px" />
-                                <div class=" ml-4">
-                                    <div class="w-full text-lg font-semibold">PDF</div>
-                                    <div class="w-full text-sm">Upload Pdf File</div>
+                                <div className=" ml-4">
+                                    <div className="w-full text-lg font-semibold">PDF</div>
+                                    <div className="w-full text-sm">Upload Pdf File</div>
                                 </div>
                             </label>
                         </li>
@@ -212,13 +274,13 @@ function Upload_pdf(params) {
                                 value="audio"
                                 checked={uploadType === "audio"}
                                 onChange={() => { setUploadType('audio') }}
-                                class="hidden peer"
+                                className="hidden peer"
                             />
-                            <label for="audio_file" class="inline-flex items-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-sm cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                            <label htmlFor="audio_file" className="inline-flex items-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-sm cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                                 <Avatar src="./src/assets/music1.png" size="50px" />
-                                <div class=" ml-4">
-                                    <div class="w-full text-lg font-semibold">Audio</div>
-                                    <div class="w-full text-sm">Upload Audio File</div>
+                                <div className=" ml-4">
+                                    <div className="w-full text-lg font-semibold">Audio</div>
+                                    <div className="w-full text-sm">Upload Audio File</div>
                                 </div>
                             </label>
                         </li>
@@ -230,13 +292,13 @@ function Upload_pdf(params) {
                                 value="speech"
                                 checked={uploadType === "speech"}
                                 onChange={() => { setUploadType('speech') }}
-                                class="hidden peer"
+                                className="hidden peer"
                             />
-                            <label for="speech_to_text" class="inline-flex items-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-sm cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                            <label htmlFor="speech_to_text" className="inline-flex items-center w-full p-3 text-gray-500 bg-white border border-gray-200 rounded-sm cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                                 <Avatar src="./src/assets/microphone.png" size="50px" />
-                                <div class=" ml-4">
-                                    <div class="w-full text-lg font-semibold">Speech to Text</div>
-                                    <div class="w-full text-sm">Upload by Speaking</div>
+                                <div className=" ml-4">
+                                    <div className="w-full text-lg font-semibold">Speech to Text</div>
+                                    <div className="w-full text-sm">Upload by Speaking</div>
                                 </div>
                             </label>
                         </li>
@@ -246,6 +308,18 @@ function Upload_pdf(params) {
                         <Upload_items type={uploadType} />
                     </div>
                 </div>
+                <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
             </div >
         </>
     );

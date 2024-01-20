@@ -105,11 +105,13 @@ exports.verifyOTP = async (req, res) => {
         user.isVerified = true;
         user.save()
 
-        res.status(200).json({
+        const token = await user.getToken();
+        
+        res.cookie("token",token,{expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), httpOnly: true }).status(200).json({
             success:true,
-            message:'Successfully verified',
-            user
-        })
+            user,
+            message:"user Verified"
+        })  
 
 
     }catch(err)

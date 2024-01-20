@@ -39,7 +39,7 @@ function Signin(params) {
                 } else {
                     dispatch({ type: "CLEAR_USER" });
                 }
-                navigate('/')
+                navigate('/upload_pdf')
             }
         } catch (e) {
             toast.error(`${e.response.data.message}`, {
