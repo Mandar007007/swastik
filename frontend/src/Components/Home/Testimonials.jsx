@@ -7,7 +7,8 @@ import './styles.css';
 import 'swiper/css/effect-cards';
 import { EffectCards, Autoplay } from 'swiper/modules';
 
-function Testimonials(params) {
+
+function Testimonials() {
 
     return (
         <>

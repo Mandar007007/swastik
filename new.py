@@ -12,7 +12,7 @@ CORS(app)
 @app.route('/api/process_audio', methods=['POST'])
 def audio_process():
 
-    os.environ["OPENAI_API_KEY"] = ""
+    os.environ["OPENAI_API_KEY"] = "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"
 
     recognizer = sr.Recognizer()
 

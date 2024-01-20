@@ -14,9 +14,12 @@ const Index = () => {
   const [showText3, setShowText3] = useState(false);
 
   const controls1 = useAnimation();
+  const controls2 = useAnimation();
+
 
   useEffect(() => {
     initFlowbite();
+    // eslint-disable-next-line no-undef
     const scroll = new LocomotiveScroll({
       el: document.querySelector("#main"),
       smooth: true,
@@ -60,6 +63,7 @@ const Index = () => {
 
   useEffect(() => {
     setTimeout(() => {
+      // eslint-disable-next-line no-undef
       gsap.to('.black-screen', {
         duration: 0.9,
         y: -700,
@@ -73,13 +77,23 @@ const Index = () => {
     threshold: 0.5,
   });
 
+  const { ref: ref2, inView: inView2 } = useInView({
+    triggerOnce: false,
+    threshold: 0.5,
+  });
+
   useEffect(() => {
     if (inView1) {
       controls1.start("visible");
     } else {
       controls1.start("hidden");
     }
-  }, [controls1, inView1]);
+    if (inView2) {
+      controls2.start("visible");
+    } else {
+      controls2.start("hidden");
+    }
+  }, [controls1, inView1,inView2,controls2]);
 
   const animationVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -95,6 +109,14 @@ const Index = () => {
     },
   };
 
+  const animationVariants2 = {
+    hidden: { opacity: 0, x: 50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
 
   return (
     <>
@@ -184,7 +206,15 @@ const Index = () => {
           <Navbar />
           <Hero />
           <Features />
+          <motion.div
+          ref={ref2}
+          initial="hidden"
+          animate={controls2}
+          variants={animationVariants2}
+           className="Testimonials"
+            >
           <Testimonials />
+          </motion.div>
           <div className="mb-[100vh] h-[10vh]"></div>
         </div>}
       </div>
