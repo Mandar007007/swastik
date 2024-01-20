@@ -9,6 +9,7 @@ import Signup from './Components/Registration/Signup'
 import OtpPage from './Components/Registration/OtpPage'
 import Signin from './Components/Registration/Signin'
 import Navbar from './Components/Navbar/Navbar'
+import Upload_pdf from './Components/PdfQnA/Upload_pdf'
 
 function App() {
   const dispatch = useDispatch()
@@ -43,6 +44,7 @@ function App() {
         <Route path='register' element={<Signup />} />
         <Route path='otp' element={<OtpPage />} />
         <Route path='signin' element={<Signin />} />
+        <Route path='upload_pdf' element={<Upload_pdf />} />
       </Routes>
     </Router>
     
