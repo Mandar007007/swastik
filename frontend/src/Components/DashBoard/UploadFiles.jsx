@@ -164,7 +164,7 @@ function Upload_items({ type }) {
     );
 }
 
-function Upload_pdf(params) {
+function UploadFiles(params) {
 
     const inputRef = useRef(null);
     const [image, setImage] = useState();
@@ -325,4 +325,4 @@ theme="light"
     );
 }
 
-export default Upload_pdf;
+export default UploadFiles;
