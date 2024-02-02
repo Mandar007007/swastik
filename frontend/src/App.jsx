@@ -11,6 +11,9 @@ import Signin from './Components/Registration/Signin'
 import Navbar from './Components/Navbar/Navbar'
 import ChatBot from './Components/ChatBot/ChatBot'
 import UploadFiles from './Components/DashBoard/UploadFiles'
+import ModelCard from './Components/Models/ModelCard'
+import ProductPage from './Components/Models/ProductPage'
+import Test from './Components/Models/Test'
 
 function App() {
   const dispatch = useDispatch()
@@ -47,6 +50,7 @@ function App() {
         <Route path='signin' element={<Signin />} />
         <Route path='upload_files' element={<UploadFiles />} />
         <Route path='chatbot' element={<ChatBot />} />
+        <Route path='products' element={<ProductPage />} />
       </Routes>
     </Router>
     
