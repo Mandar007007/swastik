@@ -7,12 +7,20 @@ import os
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
+
+# Global variable to control listening state
+listening = False
+
+@app.route('/api/stop_listening', methods=['POST'])
+def stop_listening():
+    global listening
+    listening = False
+    return jsonify({'message': 'Listening stopped'})
 
 @app.route('/api/process_audio', methods=['POST'])
 def audio_process():
-
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = ""
 
     recognizer = sr.Recognizer()
 
@@ -22,24 +30,30 @@ def audio_process():
             audio = recognizer.listen(source)
         return audio
 
-    audio = capture_voice_input()
+    global listening
+    listening = True
+    transcript = None
 
-    with NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
-        temp_file.write(audio.get_wav_data())
-        temp_file.seek(0)
-        file_path = temp_file.name
+    while listening:
+        audio = capture_voice_input()
 
-    client = OpenAI()
+        with NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+            temp_file.write(audio.get_wav_data())
+            temp_file.seek(0)
+            file_path = temp_file.name
 
-    audio_file= open(file_path, "rb")
+        client = OpenAI()
+        
 
-    transcript = client.audio.transcriptions.create(
-    model="whisper-1", 
-    file=audio_file
-    )
+        with open(file_path, "rb") as audio_file:
+            transcript = client.audio.transcriptions.create(
+                model="whisper-1", 
+                file=audio_file
+            )
 
-    playsound(file_path)
-    return jsonify({'message':transcript.text})
+        playsound(file_path)
+
+    return jsonify({'message': transcript.text})
 
 if __name__ == '__main__':
-    app.run(debug=True,port=8080)
+    app.run(debug=True, port=8080)
