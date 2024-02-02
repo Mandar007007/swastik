@@ -20,7 +20,7 @@ def stop_listening():
 
 @app.route('/api/process_audio', methods=['POST'])
 def audio_process():
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = ""
 
     recognizer = sr.Recognizer()
 
