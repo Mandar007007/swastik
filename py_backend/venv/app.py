@@ -21,7 +21,9 @@ def get_data():
 
 @app.route('/api/data/pdf', methods=['POST'])
 def get_pdf():
+
     os.environ["OPENAI_API_KEY"] = "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"
+
 
     client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
     db = client['Swastik']

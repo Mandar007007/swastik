@@ -14,7 +14,7 @@ from transformers import TrainingArguments,Trainer
 from transformers import BertTokenizer,BertForSequenceClassification
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True,origins=['http://localhost:5173'])
+CORS(app) 
 
 # Global variable to control listening state
 listening = False
@@ -28,7 +28,7 @@ def stop_listening():
 @app.route('/api/process_audio', methods=['POST'])
 def audio_process():
 
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = "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"
 
     recognizer = sr.Recognizer()
 
@@ -59,30 +59,8 @@ def audio_process():
                 file=audio_file
             )
 
-        playsound(file_path)
-
-    return jsonify({'message': transcript.text})
-
-@app.route("/api/predictratings", methods=['POST'])
-def predictRatings():
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    loaded_model = torch.load('star_rating.pth', map_location=torch.device('cpu'))
-
-    def predict_sentiment(text, model, tokenizer):
-        # Tokenize on CPU
-        inputs = tokenizer(text, padding=True, truncation=True, return_tensors='pt')
-
-        # Model inference on CPU
-        outputs = model(**inputs)
-
-        # Softmax and move predictions to CPU for further processing (if necessary)
-        predictions = torch.nn.functional.softmax(outputs.logits, dim=-1).detach().numpy()
-        return predictions
-    text = (request.json).get('text') 
-    predictions = predict_sentiment(text, loaded_model, tokenizer)
-    predictions = predictions.tolist()
-    return jsonify({'message': predictions})
-
+    playsound(file_path)
+    return jsonify({'message':transcript.text})
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
