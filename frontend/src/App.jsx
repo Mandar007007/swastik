@@ -13,7 +13,6 @@ import ChatBot from './Components/ChatBot/ChatBot'
 import UploadFiles from './Components/DashBoard/UploadFiles'
 import ModelCard from './Components/Models/ModelCard'
 import ProductPage from './Components/Models/ProductPage'
-import Test from './Components/Models/Test'
 
 function App() {
   const dispatch = useDispatch()

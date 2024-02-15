@@ -27,6 +27,31 @@ function Upload_items({ type }) {
         console.log(file);
     }
 
+    const startSpeaking = async () => {
+        try{
+            setIsSpeaking(!isSpeaking)
+
+            const response = await axios.post("http://127.0.0.1:8080/api/process_audio",{},{
+                headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                withCredentials:true
+            })
+            
+            console.log(response)
+            
+        }catch(err)
+        {
+            console.error(err);
+        }
+    }
+
+    const stopSpeaking = async () => {
+        setIsSpeaking(!isSpeaking)
+        const response = await axios.post("http://localhost:8080/api/stop_listening",{},{
+            headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            withCredentials:true
+        })
+    }
+
 
     const handleSubmit = async () => {
         try {
@@ -128,12 +153,12 @@ function Upload_items({ type }) {
                                 visible={true}
                             />
                         <div className="">
-                            <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => setIsSpeaking(!isSpeaking)} >Stop</button>
+                            <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={stopSpeaking} >Stop</button>
                         </div>
                     </div>
                 ) : (
                     <div className="">
-                        <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => setIsSpeaking(!isSpeaking)} >Start</button>
+                        <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={startSpeaking} >Start</button>
                     </div>
                 )}
             </div>

@@ -3,6 +3,7 @@ import Navbar from "../Navbar/Navbar";
 import { FaArrowRight } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { TypeAnimation } from "react-type-animation"
+import axios from "axios";
 
 function Answer ({answer}) {
     return (
@@ -79,8 +80,12 @@ function ChatBot(params) {
     const [qnaArr, setQnaArr] = useState([]);
     const renderAfterCalled = useRef(false);
 
-    const findAnswer = () => {
-        setMyAnswer("Lorem ipsum dolor sit ametw Lorem ipsum dolor sit amet consectetur adipisicing elit. labore nostrum minima mollitia voluptatem ratione fuga blanditiis aliquid soluta.")
+    const findAnswer = async () => {
+        const response = await axios.post("http://localhost:5000/api/ask",{id:"65aeb58dac8a3fde59b755ff",query:myQuestion},{
+            headers: {'Content-Type': 'application/json'},
+            withCredentials: true
+        })
+        setMyAnswer(response.data.message)
         setFlag(flag + 1)
     }
     
