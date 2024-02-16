@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
 import { MdCloudUpload } from "react-icons/md";
 import { FaFilePdf } from "react-icons/fa6";
@@ -10,11 +10,15 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { FaCheckCircle } from "react-icons/fa";
 
-function Upload_items({ type }) {
+function Upload_items(props) {
 
     const [pdf_file, setPdfFile] = useState(null);
     const [audio_file, setAudioFile] = useState();
     const [isSpeaking, setIsSpeaking] = useState(false);
+
+    useEffect(() => {
+        console.log(props)
+    })
 
     const handlePdfFileChange = (e) => {
         const file = e.target.files[0];
@@ -27,6 +31,31 @@ function Upload_items({ type }) {
         console.log(file);
     }
 
+    const startSpeaking = async () => {
+        try{
+            setIsSpeaking(!isSpeaking)
+
+            const response = await axios.post("http://127.0.0.1:8080/api/process_audio",{},{
+                headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                withCredentials:true
+            })
+            
+            console.log(response)
+            
+        }catch(err)
+        {
+            console.error(err);
+        }
+    }
+
+    const stopSpeaking = async () => {
+        setIsSpeaking(!isSpeaking)
+        const response = await axios.post("http://localhost:8080/api/stop_listening",{},{
+            headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            withCredentials:true
+        })
+    }
+
 
     const handleSubmit = async () => {
         try {
@@ -34,6 +63,10 @@ function Upload_items({ type }) {
                 try {
                     const formData = new FormData();
                     formData.append('file', pdf_file);
+                    formData.append('title',props.title)
+                    formData.append('description',props.description)
+                    formData.append('category',props.category)
+
                     return await axios.post("http://localhost:5000/api/data/pdf", formData, {
                         headers: { 'Content-Type': 'multipart/form-data', 'Access-Control-Allow-Origin': '*' },
                         withCredentials: true
@@ -86,7 +119,7 @@ function Upload_items({ type }) {
         }
     }
 
-    if (type == 'audio') {
+    if (props.type == 'audio') {
         return (
             <div className="">
                 
@@ -113,7 +146,7 @@ function Upload_items({ type }) {
             </div>
         );
     }
-    if (type == 'speech') {
+    if (props.type == 'speech') {
         return (
             <div className="flex items-center justify-center w-full mt-12">
                 {isSpeaking ? (
@@ -128,12 +161,12 @@ function Upload_items({ type }) {
                                 visible={true}
                             />
                         <div className="">
-                            <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => setIsSpeaking(!isSpeaking)} >Stop</button>
+                            <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={stopSpeaking} >Stop</button>
                         </div>
                     </div>
                 ) : (
                     <div className="">
-                        <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => setIsSpeaking(!isSpeaking)} >Start</button>
+                        <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={startSpeaking} >Start</button>
                     </div>
                 )}
             </div>
@@ -164,10 +197,13 @@ function Upload_items({ type }) {
     );
 }
 
-function UploadFiles(params) {
+function UploadFiles() {
 
     const inputRef = useRef(null);
     const [image, setImage] = useState();
+    const [title, setTitle] = useState('title')
+    const [Description,setDescription] = useState('descript')
+    const [category,setCategory] = useState('Lecture')
 
     const handleImageClick = () => {
         inputRef.current?.click();
@@ -209,7 +245,7 @@ function UploadFiles(params) {
                             <label for="input-group-1" class="text-[16px] font-medium dark:text-white">Title</label>
                         </div>
                         <div className=" col-span-3">
-                            <input type="text" id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2 rounded-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your title" />
+                            <input onChange={(e) => setTitle(e.target.value)}type="text" id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2 rounded-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your title" />
                         </div>
                     </div>
 
@@ -218,7 +254,7 @@ function UploadFiles(params) {
                             <label for="input-group-1" class="text-[16px] font-medium dark:text-white">Description</label>
                         </div>
                         <div className=" col-span-3">
-                            <textarea id="message" rows="4" class="w-full text-sm text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+                            <textarea id="message" rows="4" onChange={(e) => setDescription(e.target.value) } class="w-full text-sm text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
                         </div>
                     </div>
 
@@ -227,7 +263,7 @@ function UploadFiles(params) {
                             <label for="input-group-1" class="text-[16px] font-medium dark:text-white">Category</label>
                         </div>
                         <div className=" col-span-3">
-                            <select id="default" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select onChange={(e) => setCategory(e.target.value)} id="default" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="Lecture" selected>Lecture</option>
                                 <option value="Seminar">Seminar</option>
                                 <option value="Artical">Artical</option>
@@ -305,7 +341,7 @@ function UploadFiles(params) {
                     </ul>
 
                     <div className="mt-8">
-                        <Upload_items type={uploadType} />
+                       <Upload_items type={uploadType} title={title} description={Description} category={category} />
                     </div>
                 </div>
                 <ToastContainer

@@ -12,7 +12,7 @@ import Navbar from './Components/Navbar/Navbar'
 import ChatBot from './Components/ChatBot/ChatBot'
 import ModelCard from './Components/Models/ModelCard'
 import ProductPage from './Components/Models/ProductPage'
-import UploadFiles from './Components/Dashboard/UploadFiles'
+import Test from './Components/Models/Test'
 
 function App() {
   const dispatch = useDispatch()

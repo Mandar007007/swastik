@@ -10,9 +10,12 @@ from pymongo import MongoClient
 import pickle 
 from bson import ObjectId
 from flask_cors import CORS
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True,origins=['http://localhost:5173'])
+load_dotenv(dotenv_path="../.env")
+app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
@@ -21,11 +24,16 @@ def get_data():
 
 @app.route('/api/data/pdf', methods=['POST'])
 def get_pdf():
-    os.environ["OPENAI_API_KEY"] = ""
 
     client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
     db = client['Swastik']
     collection = db['speech']
+
+    title = request.form.get('title')
+    description = request.form.get('description')
+    category = request.form.get('category') 
+
+    print(title)
 
     if 'file' not in request.files:
         return jsonify({'error': 'invalid data'})
@@ -52,13 +60,12 @@ def get_pdf():
     VectorStore = FAISS.from_texts(chunks, embedding=embeddings)
     serialized_vector_store = pickle.dumps(VectorStore)
 
-    collection.insert_one({"vector_store_data": serialized_vector_store})
+    collection.insert_one({"vector_store_data": serialized_vector_store,"title":title,"description":description,"category":category})
 
     return jsonify({'message': 'successfully stored the data'})
 
 @app.route('/api/ask', methods=['POST'])
 def ask():
-    os.environ["OPENAI_API_KEY"] = ""
 
     data = request.json
     client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
