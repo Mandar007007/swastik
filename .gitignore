@@ -25,3 +25,4 @@ dist-ssr
 *.sw?
 *.pth
 star_rating.pth
+*.env
