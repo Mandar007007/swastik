@@ -59,10 +59,10 @@ const Hero = () => {
     }, [controls1, inView1,controls2,inView2]);
 
     return (
-        <div class=" bg-gray-50 flex flex-col justify-center relative">
-            <div class="mx-auto">
+        <div className=" bg-gray-50 flex flex-col justify-center relative">
+            <div className="mx-auto">
 
-                <div class="absolute -inset-1 bg-gradient-to-t from-red-300 via-white to-white rounded-lg blur opacity-25"></div>
+                <div className="absolute -inset-1 bg-gradient-to-t from-[#fddace] via-white to-white rounded-lg blur opacity-25"></div>
 
                 <div className="relative">
                     <div className="relative w-full h-full flex flex-col justify-center items-center ">

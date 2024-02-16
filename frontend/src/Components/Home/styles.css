@@ -1,10 +1,10 @@
-.swiper {
-    max-width: 600px;
-    min-height: 300px;
-  }
-  
-  .swiper-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.myTestinomial .swiper {
+  max-width: 600px;
+  min-height: 300px;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

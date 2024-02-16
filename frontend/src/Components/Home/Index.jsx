@@ -6,6 +6,8 @@ import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Testimonials from "./Testimonials";
 import { initFlowbite } from "flowbite";
+import Offerings from "./Offering";
+import Footer from "../Footer/Footer";
 
 const Index = () => {
   const [show, setShow] = useState(true);
@@ -201,21 +203,25 @@ const Index = () => {
             animate={controls1}
             variants={animationVariants}
           >
-            
           </motion.div>
+
           <Navbar />
           <Hero />
           <Features />
+
+          <Offerings />
+
           <motion.div
-          ref={ref2}
-          initial="hidden"
-          animate={controls2}
-          variants={animationVariants2}
-           className="Testimonials"
-            >
-          <Testimonials />
+            ref={ref2}
+            initial="hidden"
+            animate={controls2}
+            variants={animationVariants2}
+            className="Testimonials"
+          >
+            <Testimonials />
           </motion.div>
-          <div className="mb-[100vh] h-[10vh]"></div>
+
+          <Footer />
         </div>}
       </div>
     </>

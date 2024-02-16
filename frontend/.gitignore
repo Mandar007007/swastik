@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+src/Component/Models/Test.jsx
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

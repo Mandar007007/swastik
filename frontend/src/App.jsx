@@ -10,10 +10,9 @@ import OtpPage from './Components/Registration/OtpPage'
 import Signin from './Components/Registration/Signin'
 import Navbar from './Components/Navbar/Navbar'
 import ChatBot from './Components/ChatBot/ChatBot'
-import UploadFiles from './Components/DashBoard/UploadFiles'
 import ModelCard from './Components/Models/ModelCard'
 import ProductPage from './Components/Models/ProductPage'
-import Test from './Components/Models/Test'
+import UploadFiles from './Components/Dashboard/UploadFiles'
 
 function App() {
   const dispatch = useDispatch()

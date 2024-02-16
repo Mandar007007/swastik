@@ -108,7 +108,7 @@ function ProductPage(params) {
                     <Avatar src="./src/assets/globe.png" size="65px" />
                     <span className=" text-3xl ms-2">Lecture Modules</span>
                 </h1>
-                <div className="my-10 mx-8">
+                <div className="myProduct my-10 mx-8">
                     <Swiper
                         direction={'horizontal'}
                         slidesPerView={slides}
@@ -118,7 +118,6 @@ function ProductPage(params) {
                             clickable: true,
                         }}
                         modules={[Mousewheel, Pagination]}
-                        className="mySwiper"
                     >
                         {booksItem.map((slideContent, index) => (
                             <SwiperSlide key={index}>
@@ -146,11 +145,7 @@ function ProductPage(params) {
                     <span className=" text-3xl ms-2">Seminar Modules</span>
                 </h1>
             </div>
-
-
         </>
-
-
     );
 }
 
