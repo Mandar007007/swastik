@@ -4,10 +4,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
-import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
 
 
 
