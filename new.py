@@ -5,6 +5,7 @@ from tempfile import NamedTemporaryFile
 from openai import OpenAI
 import os
 from flask_cors import CORS
+from pymongo import MongoClient
 import torch
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -27,6 +28,29 @@ def stop_listening():
     global listening
     listening = False
     return jsonify({'message': 'Listening stopped'})
+
+@app.route('/api/getspeech', methods=['GET'])
+def get_speech():
+    try:
+        client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
+        db = client['Swastik']
+        collection = db['speech']
+        projection = {'vector_store_data': 0}
+
+        speeches = list(collection.find({},projection))
+
+
+        for speech in speeches:
+            speech['_id'] = str(speech['_id'])
+
+        client.close()
+
+        return jsonify({"success": True, "speeches": speeches})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
 
 @app.route('/api/process_audio', methods=['POST'])
 def audio_process():
@@ -88,6 +112,8 @@ def predictRatings():
 
     except Exception as e:
         return jsonify({'error': str(e)})
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

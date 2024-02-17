@@ -28,6 +28,11 @@ const intitalState = {
           ...state,
           toVerifyEmail:action.payload
         }
+      case "SET_SPEECH":
+        return{
+          ...state,
+          speechId:action.payload
+        }
   
       default:
         return state;

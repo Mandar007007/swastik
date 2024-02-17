@@ -13,6 +13,7 @@ import 'swiper/css/pagination';
 import './styles.css';
 
 import { FreeMode, Mousewheel, Pagination } from 'swiper/modules';
+import axios from "axios";
 
 function ProductPage(params) {
 
@@ -20,12 +21,35 @@ function ProductPage(params) {
     const [category, setCategory] = useState('All');
     const [width, setWidth] = useState(window.screen.width);
     const [slides, setSlides] = useState(3);
-    const [booksItem, setBooksItem] = useState([<ModelCard />, <ModelCard />, <ModelCard />, <ModelCard />]);
+    const [booksItem, setBooksItem] = useState([]);
+
+    const getSpeech = async () => {
+        try{
+            const response = await axios.get('http://localhost:8080/api/getspeech',{},{
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                withCredentials:true
+            })
+
+            const speeches = response.data.speeches.map((speech,index) => {
+                return <ModelCard key={index} params={{title:speech.title,description:speech.description,id:speech._id}}/>
+            })
+            setBooksItem(speeches)
+
+        }catch(e)
+        {
+            console.log("Error: " + e.message);
+        }
+    }
 
     useEffect(() => {
         initFlowbite();
     }, []);
 
+    useEffect(() => {
+        getSpeech()
+    },[])
     useEffect(() => {
         if (isOpen)
             setIsOpen(!isOpen);
