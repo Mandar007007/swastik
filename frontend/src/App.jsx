@@ -13,6 +13,8 @@ import ChatBot from './Components/ChatBot/ChatBot'
 import ModelCard from './Components/Models/ModelCard'
 import ProductPage from './Components/Models/ProductPage'
 import Test from './Components/Models/Test'
+import UploadFiles from './Components/Dashboard/UploadFiles'
+import ProfilePage from './Components/Models/ProfilePage'
 
 function App() {
   const dispatch = useDispatch()
@@ -50,6 +52,7 @@ function App() {
         <Route path='upload_files' element={<UploadFiles />} />
         <Route path='chatbot' element={<ChatBot />} />
         <Route path='products' element={<ProductPage />} />
+        <Route path='profile' element={<ProfilePage />} />
       </Routes>
     </Router>
     
