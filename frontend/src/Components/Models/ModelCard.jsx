@@ -4,8 +4,15 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
+import { Rating } from '@smastrom/react-rating'
+import '@smastrom/react-rating/style.css'
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+
 
 function ModelCard(params) {
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -27,7 +34,9 @@ function ModelCard(params) {
                     <div onClick={openChatBot} className=" absolute flex justify-center items-center right-5 md:top-[6.8rem] top-[7rem] bg-white md:h-[4.5rem] h-16 md:w-[4.5rem] w-16 border-4 rounded-full cursor-pointer hover:shadow-md duration-300 hover:shadow-sky-200 " ><IoPlaySharp className=" text-2xl" /></div>
                     <img className=" object-fill w-full rounded-t-lg h-36" src="./src/assets/bg6.png" alt="" />
                     <div className="flex flex-col p-4 leading-normal">
-                    <Rating
+                    
+                        <Rating
+
                             style={{ maxWidth: 75 }}
                             value={2.5}
                             readOnly
