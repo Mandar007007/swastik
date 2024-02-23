@@ -3,7 +3,7 @@ import { BsFacebook, BsInstagram, BsLinkedin, BsTwitter } from 'react-icons/bs';
 function Footer(params) {
     return (
         <>
-            <div className="relative mt-24 flex justify-center">
+            <div className="relative flex justify-center">
                 <div className=" bg-black w-full">
                     <div className=" grid md:grid-cols-5 grid-cols-1 ">
                         <div className=" col-span-2 flex flex-col md:px-12 px-8 md:py-12 pt-12 md:justify-start justify-center ">

@@ -16,7 +16,7 @@ function Testimonials() {
                     <h1 className=" text-[30px] font-semibold mt-16 mb-16">What Our Client Says</h1>
                 </div>
             </div>
-            <div className="myTestinomial mx-10">
+            <div className="myTestinomial mx-10 mb-24">
                 <Swiper 
                     effect={'cards'}
                     grabCursor={true}
