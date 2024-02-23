@@ -220,7 +220,7 @@ function UploadFiles() {
         <>
             <Navbar />
             <div className=" grid grid-cols-12 py-4 px-8">
-                <div className=" col-span-4 row-span-3 bg-gray-100 rounded-sm py-5 px-4">
+                <div className=" col-span-4 row-span-3 bg-[#f5f7fe] rounded-sm py-5 px-4">
 
                     <div className=" flex flex-col items-center sm:mb-6 mb-10">
                         <div onClick={handleImageClick}>
@@ -236,7 +236,7 @@ function UploadFiles() {
                                 style={{ display: "none" }}
                             />
                         </div>
-                        <button type="button" class=" mt-5 outline outline-gary-600 px-2 py-1 rounded-md text-slate-400 hover:bg-slate-400 hover:text-white ">Upload Event Logo</button>
+                        <button type="button" class=" mt-2 outline outline-gary-600 px-2 py-1 rounded-sm text-slate-400 hover:bg-slate-400 hover:text-white ">Upload Event Logo</button>
                     </div>
 
 
