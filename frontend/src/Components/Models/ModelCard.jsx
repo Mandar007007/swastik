@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoPlaySharp } from "react-icons/io5"
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
 import '@smastrom/react-rating/style.css'
+import axios from "axios";
 
 
 
@@ -13,6 +14,34 @@ function ModelCard(params) {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [rating,setRating] = useState(0)
+
+    const getComments = async () => {
+        try{
+            const response = await axios.post('http://localhost:5000/api/getComments',{speechId:params.params.id},{
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        })
+        if(response.data.comments.length > 0){
+        response.data.comments.forEach(async (comment) => {
+            const response = await axios.post('http://localhost:8080/api/predictratings',{text:comment.commentText},{
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            })
+            setRating(rating+response.data.predictions)
+            
+            console.log(response.data.predictions)
+        })
+    }
+        setRating(rating/ response.data.comments.length)
+        }catch(err){
+            console.error(err.message)
+        }
+    }
+
+    useEffect( () => {
+        getComments()
+    },[])
 
     const openChatBot = async () => {
         try{
@@ -36,7 +65,7 @@ function ModelCard(params) {
                         <Rating
 
                             style={{ maxWidth: 75 }}
-                            value={2.5}
+                            value={rating}
                             readOnly
                         />
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-left">{params.params.title}</h5>

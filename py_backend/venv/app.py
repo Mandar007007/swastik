@@ -11,6 +11,7 @@ import pickle
 from bson import ObjectId
 from flask_cors import CORS
 from dotenv import load_dotenv
+from bson import json_util
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True,origins=['http://localhost:5173'])
@@ -60,7 +61,7 @@ def get_pdf():
     VectorStore = FAISS.from_texts(chunks, embedding=embeddings)
     serialized_vector_store = pickle.dumps(VectorStore)
 
-    collection.insert_one({"vector_store_data": serialized_vector_store,"title":title,"description":description,"category":category})
+    collection.insert_one({"vector_store_data": serialized_vector_store,"title":title,"description":description,"category":category,"comments":[]})
 
     return jsonify({'message': 'successfully stored the data'})
 
@@ -84,6 +85,51 @@ def ask():
     message = chain.run(input_documents=docs, question=query)
 
     return jsonify({"message": message})
+
+@app.route('/api/comment', methods=['POST'])
+def doComment():
+    try:
+        data = request.json
+        client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
+        db = client['Swastik']
+        collection = db['speech']
+
+        speech_id = data.get('speechId')
+        user_id = data.get('userId')
+        comment_text = data.get('commentText')
+
+        update_result = collection.update_one(
+            {'_id': ObjectId(speech_id)},
+            {'$push': {'comments': {'userId': user_id, 'commentText': comment_text}}}
+        )
+
+        if update_result.modified_count > 0:
+            return jsonify({'status': 'success', 'message': 'Comment added successfully'})
+        else:
+            return jsonify({'status': 'error', 'message': 'Failed to add comment'})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    
+@app.route('/api/getComments', methods=['POST'])
+def getComments():
+    try:
+        data = request.json
+        client = MongoClient('mongodb://127.0.0.1:27017/Swastik')
+        db = client['Swastik']
+        collection = db['speech']
+
+        speech_id = data.get('speechId')
+        speech = collection.find_one({'_id': ObjectId(speech_id)})
+        
+        if speech:
+            comments = speech.get('comments', [])
+            return jsonify({'comments': comments})
+        else:
+            return jsonify({'error': 'Speech not found'})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { TypeAnimation } from "react-type-animation"
 import axios from "axios";
 import { useSelector } from "react-redux";
+import Comments from "../comments/Comments";
 
 function Answer ({answer}) {
     return (
@@ -124,7 +125,7 @@ function ChatBot(params) {
                     }
                 </div>                
 
-                <div className=" fixed bottom-0 left-0 right-0 py-5 px-[100px] bg-gray-100 mx-32 rounded-t-lg">
+                <div className=" fixed flex flex-direction bottom-0 left-0 right-0 py-5 px-[100px] bg-gray-100 mx-32 rounded-t-lg">
                     <input  
                         type="text" 
                         id="msg" 
@@ -134,7 +135,8 @@ function ChatBot(params) {
                         value={myQuestion}
                         onChange={e => setMyQuestion(e.target.value)}
                     />
-                    <button type="submit" className="text-white absolute end-[110px] bottom-[1.80rem] bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-sm text-xl p-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={findAnswer} ><FaArrowRight /></button>
+                    <button type="submit" className="text-white mr-20 absolute end-[110px] bottom-[1.80rem] bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-sm text-xl p-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={findAnswer} ><FaArrowRight /></button>
+                    <div className="ml-20"><Comments /></div>
                 </div>
             </div>
         </>

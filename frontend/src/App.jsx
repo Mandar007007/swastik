@@ -15,6 +15,7 @@ import ProductPage from './Components/Models/ProductPage'
 import Test from './Components/Models/Test'
 import ProfilePage from './Components/Models/ProfilePage'
 import UploadFiles from './Components/Dashboard/UploadFiles'
+import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
   const dispatch = useDispatch()
@@ -43,6 +44,7 @@ function App() {
   }, [])
 
   return (
+    <ChakraProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Index />} />
@@ -55,6 +57,7 @@ function App() {
         <Route path='profile' element={<ProfilePage />} />
       </Routes>
     </Router>
+    </ChakraProvider>
     
   )
 }

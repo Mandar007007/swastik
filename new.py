@@ -107,8 +107,9 @@ def predictRatings():
 
         # Softmax and move predictions to CPU for further processing (if necessary)
         predictions = torch.nn.functional.softmax(outputs.logits, dim=-1).detach().numpy().tolist()
+        max_index = np.argmax(predictions).item()
 
-        return jsonify({'predictions': predictions})
+        return jsonify({'predictions': max_index})
 
     except Exception as e:
         return jsonify({'error': str(e)})
