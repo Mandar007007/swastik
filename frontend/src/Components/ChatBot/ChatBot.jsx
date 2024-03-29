@@ -148,7 +148,6 @@ function ChatBot(params) {
                     </div>
                 </div>
             </div>
-            <Footer/>
         </>
     );
 }
