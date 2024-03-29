@@ -2,10 +2,15 @@ import Navbar from "../Navbar/Navbar";
 import { Rating } from "@smastrom/react-rating";
 import '@smastrom/react-rating/style.css'
 import Footer from "../Footer/Footer";
+import { useEffect } from "react";
 
 function ProfilePage(params) {
     
     const modulesData = [1, 2, 3, 4, 5, 6, 7];
+
+    useEffect(() => {
+        initFlowbite();
+    }, []);
 
     return(
         <>

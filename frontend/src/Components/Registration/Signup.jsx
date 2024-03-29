@@ -7,6 +7,8 @@ import Navbar from "../Navbar/Navbar"
 import { ToastContainer, toast } from "react-toastify"
 import { useDispatch } from "react-redux"
 import axios from "axios"
+import Footer from "../Footer/Footer"
+import { useEffect } from "react"
 
 function Signup() {
     const dispatch = useDispatch();
@@ -69,13 +71,17 @@ function Signup() {
         }
     }
 
+    useEffect(() => {
+        initFlowbite();
+    }, []);
+
     return (
         <>
             <Navbar />
             <ToastContainer />
             <div className="bg-gray-100 py-8">
                 <form method="POST">
-                    <div className=" max-w-[800px] max-h-[1100px] sm:mx-auto mx-5 bg-white shadow-xl py-8 sm:px-20 px-10 sm:grid sm:grid-cols-7 grid-cols-1 justify-center">
+                    <div className=" max-w-[800px] max-h-[1100px] sm:mx-auto mx-5 bg-white shadow-xl py-8 sm:px-20 px-5 sm:grid sm:grid-cols-7 grid-cols-1 justify-center">
                         <div className="profile grid col-start-1 col-end-4 sm:mr-10 justify-center">
                             <h1 className="sm:hidden text-center mb-5 text-[30px]">Register Here</h1>
                             <div className="flex flex-col items-center sm:my-auto mb-5">
@@ -139,6 +145,7 @@ function Signup() {
                     </div>
                 </form>
             </div>
+            <Footer />
         </>
     );
 }

@@ -6,6 +6,7 @@ import { TypeAnimation } from "react-type-animation"
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Comments from "../comments/Comments";
+import Footer from "../Footer/Footer";
 
 function Answer ({answer}) {
     return (
@@ -109,6 +110,10 @@ function ChatBot(params) {
         }
     }
 
+    useEffect(() => {
+        initFlowbite();
+    }, []);
+
     return (
         <>
             <Navbar />
@@ -125,20 +130,25 @@ function ChatBot(params) {
                     }
                 </div>                
 
-                <div className=" fixed flex flex-direction bottom-0 left-0 right-0 py-5 px-[100px] bg-gray-100 mx-32 rounded-t-lg">
-                    <input  
-                        type="text" 
-                        id="msg" 
-                        className="w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-dark-500 dark:focus:border-dark-500" 
-                        placeholder="Message AI..." 
-                        required 
-                        value={myQuestion}
-                        onChange={e => setMyQuestion(e.target.value)}
-                    />
-                    <button type="submit" className="text-white mr-20 absolute end-[110px] bottom-[1.80rem] bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-sm text-xl p-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={findAnswer} ><FaArrowRight /></button>
-                    <div className="ml-20"><Comments /></div>
+                <div className=" fixed right-0 left-0 bottom-0 py-5 md:px-[100px] px-5 bg-gray-100 md:mx-32 mx-5 rounded-t-lg">
+                    <div className=" flex items-center ">
+                        <div className=" w-full mr-3">
+                            <input
+                                type="text" 
+                                id="msg" 
+                                className="w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-dark-500 dark:focus:border-dark-500" 
+                                placeholder="Message AI..." 
+                                required 
+                                value={myQuestion}
+                                onChange={e => setMyQuestion(e.target.value)}
+                            />
+                            <button type="submit" className="text-white absolute md:end-[160px] end-[80px] bottom-[1.80rem] bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-sm text-xl p-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={findAnswer} ><FaArrowRight /></button>    
+                        </div>
+                        <div className=" "><Comments /></div>
+                    </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }
