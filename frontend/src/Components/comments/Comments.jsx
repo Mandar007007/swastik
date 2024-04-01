@@ -37,8 +37,7 @@ function Comments() {
     } catch (err) {
       console.log(err.message)
     }
-<<<<<<< HEAD
-=======
+
 
     useEffect(() => {
         showComments()
@@ -75,7 +74,6 @@ function Comments() {
           </Modal>
       </>
     )
->>>>>>> 6abca4a9d03217c6f2ab2c3872d76479a92252ac
   }
 
   useEffect(() => {
