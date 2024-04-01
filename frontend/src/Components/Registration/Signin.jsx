@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
 import './gola.css'
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from "../Footer/Footer";
+import { useEffect } from "react";
 
 function Signin(params) {
     const dispatch = useDispatch()
@@ -56,6 +58,10 @@ function Signin(params) {
         }
     }
 
+    useEffect(() => {
+        initFlowbite();
+    }, []);
+
     return (
         <>
             <Navbar />
@@ -73,7 +79,7 @@ function Signin(params) {
             />
             <div className="bg-gray-100 py-8 ">
                 <form method="POST" className="">
-                    <div className=" max-w-[800px] max-h-[1100px] sm:mx-auto mx-5 bg-white shadow-xl py-8 sm:px-20 px-10 sm:grid sm:grid-cols-7 grid-cols-1 justify-center">
+                    <div className=" max-w-[800px] max-h-[1100px] sm:mx-auto mx-5 bg-white shadow-xl py-8 sm:px-20 px-5 sm:grid sm:grid-cols-7 grid-cols-1 justify-center">
                         <div className="profile grid col-start-1 col-end-4 sm:mr-10 justify-center">
                             <h1 className="sm:hidden text-center mb-5 text-[30px]">Welcome Back</h1>
                             <div className="flex flex-col items-center sm:my-auto mb-5">
@@ -128,6 +134,7 @@ function Signin(params) {
                     </div>
                 </form>
             </div>
+            <Footer/>
         </>
     );
 }

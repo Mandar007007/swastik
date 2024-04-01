@@ -5,8 +5,14 @@ import Navbar from "../Navbar/Navbar";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import Footer from "../Footer/Footer";
+import { useEffect } from "react";
 
 function OtpPage() {
+
+    useEffect(() => {
+        initFlowbite();
+    }, []);
 
     const navigate = useNavigate();
     const [otp, setOtp] = useState();
@@ -102,6 +108,7 @@ function OtpPage() {
                     </div>
                 </form>
             </div>
+            <Footer />
         </>
     );
 }

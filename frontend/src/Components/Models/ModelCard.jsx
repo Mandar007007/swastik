@@ -14,7 +14,7 @@ function ModelCard(params) {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [rating,setRating] = useState(0)
+    const [rating, setRating] = useState(0)
 
     const getComments = async () => {
         try{

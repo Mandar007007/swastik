@@ -9,12 +9,16 @@ import Avatar from "react-avatar";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { FaCheckCircle } from "react-icons/fa";
+import ReactAudioPlayer from 'react-audio-player';
+
+import Footer from "../Footer/Footer";
 
 function Upload_items(props) {
 
     const [pdf_file, setPdfFile] = useState(null);
     const [audio_file, setAudioFile] = useState();
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [spokenAudio,setSpokenAudio] = useState(null);
 
     useEffect(() => {
         console.log(props)
@@ -30,6 +34,20 @@ function Upload_items(props) {
         setAudioFile(file);
         console.log(file);
     }
+    const decodeBase64AndSetAudio = (base64Data) => {
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'audio/ogg' });
+    
+        // Create URL for Blob
+        const audioUrl = URL.createObjectURL(blob);
+    
+        setSpokenAudio(audioUrl);
+      };
 
     const startSpeaking = async () => {
         try{
@@ -39,8 +57,10 @@ function Upload_items(props) {
                 headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                 withCredentials:true
             })
-            
-            console.log(response)
+            console.log(response.data.audio_file)
+
+            decodeBase64AndSetAudio(response.data.audio_file)
+
             
         }catch(err)
         {
@@ -138,7 +158,7 @@ function Upload_items(props) {
                         </div>
                     )}
 
-                    <input type="file" onChange={handleAudioFileChange} className="hidden" />
+                    <input type="file" onChange={handleAudioFileChange} accept=".mp3" className="hidden" />
                 </label>
                 <div className=" flex items-center justify-center">
                     <button onClick={handleSubmit} type="button" className=" mt-5 outline outline-blue-600 px-2 py-1 rounded-sm text-blue-400 hover:bg-blue-600 hover:text-white ">Submitaa</button>
@@ -165,9 +185,12 @@ function Upload_items(props) {
                         </div>
                     </div>
                 ) : (
-                    <div className="">
-                        <button type="button" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={startSpeaking} >Start</button>
+                    <div className="flex flex-col items-center justify-center">
+                    <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={startSpeaking}>Start</button>
+                    <div className="mt-5">
+                      <ReactAudioPlayer src={spokenAudio} controls />
                     </div>
+                  </div>
                 )}
             </div>
         );
@@ -188,7 +211,7 @@ function Upload_items(props) {
                         <p className="text-xs text-gray-500 dark:text-gray-400">PDF File (max. size 1 MB)</p>
                     </div>
                 )}
-                <input type="file" onChange={handlePdfFileChange} class="hidden" />
+                <input type="file" accept=".pdf" onChange={handlePdfFileChange} class="hidden" />
             </label>
             <div className=" flex items-center justify-center">
                 <button onClick={handleSubmit} type="button" className=" mt-5 outline outline-blue-600 px-2 py-1 rounded-sm text-blue-400 hover:bg-blue-600 hover:text-white ">Submitab</button>
@@ -216,11 +239,15 @@ function UploadFiles() {
 
     const [uploadType, setUploadType] = useState('pdf');
 
+    useEffect(() => {
+        initFlowbite();
+    }, []);
+
     return (
         <>
             <Navbar />
-            <div className=" grid grid-cols-12 py-4 px-8">
-                <div className=" col-span-4 row-span-3 bg-[#f5f7fe] rounded-sm py-5 px-4">
+            <div className=" grid grid-cols-12 py-4 md:px-8 px-5">
+                <div className=" lg:col-span-4 sm:col-span-6 col-span-12 row-span-3 bg-[#f5f7fe] rounded-sm py-5 px-4">
 
                     <div className=" flex flex-col items-center sm:mb-6 mb-10">
                         <div onClick={handleImageClick}>
@@ -236,34 +263,28 @@ function UploadFiles() {
                                 style={{ display: "none" }}
                             />
                         </div>
-                        <button type="button" class=" mt-2 outline outline-gary-600 px-2 py-1 rounded-sm text-slate-400 hover:bg-slate-400 hover:text-white ">Upload Event Logo</button>
+                        <button type="button" class=" mt-2 outline outline-gray-400 px-2 py-1 rounded-sm text-slate-400 hover:bg-slate-400 hover:text-white ">Upload Module Image</button>
                     </div>
 
 
-                    <div className=" grid grid-cols-4 items-center mb-5">
-                        <div className=" col-span-1">
-                            <label for="input-group-1" class="text-[16px] font-medium dark:text-white">Title</label>
-                        </div>
-                        <div className=" col-span-3">
-                            <input onChange={(e) => setTitle(e.target.value)}type="text" id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2 rounded-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your title" />
+                    <div className=" items-center mb-5">
+                        <div className=" flex flex-col">
+                            <label for="input-group-1" className=" mb-2 text-[16px] text-gray-600 font-medium dark:text-white">Title</label>
+                            <input onChange={(e) => setTitle(e.target.value)} type="text" id="input-group-1" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2 rounded-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your title" />
                         </div>
                     </div>
 
-                    <div className=" grid grid-cols-4 mb-5">
-                        <div className=" col-span-1">
-                            <label for="input-group-1" class="text-[16px] font-medium dark:text-white">Description</label>
-                        </div>
-                        <div className=" col-span-3">
-                            <textarea id="message" rows="4" onChange={(e) => setDescription(e.target.value) } class="w-full text-sm text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+                    <div className="mb-5">
+                        <div className=" flex flex-col">
+                            <label for="input-group-1" className=" mb-2 text-[16px] text-gray-600 font-medium dark:text-white">Description</label>
+                            <textarea id="message" rows="4" onChange={(e) => setDescription(e.target.value) } className="w-full text-sm text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your module description here..."></textarea>
                         </div>
                     </div>
 
-                    <div className=" grid grid-cols-4 items-center mb-5">
-                        <div className=" col-span-1">
-                            <label for="input-group-1" class="text-[16px] font-medium dark:text-white">Category</label>
-                        </div>
-                        <div className=" col-span-3">
-                            <select onChange={(e) => setCategory(e.target.value)} id="default" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <div className="items-center mb-5">
+                        <div className=" flex flex-col">
+                            <label for="input-group-1" className=" mb-2 text-[16px] text-gray-600 font-medium dark:text-white">Category</label>
+                            <select onChange={(e) => setCategory(e.target.value)} id="default" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="Lecture" selected>Lecture</option>
                                 <option value="Seminar">Seminar</option>
                                 <option value="Artical">Artical</option>
@@ -271,19 +292,17 @@ function UploadFiles() {
                             </select>
                         </div>
                     </div>
-                    <div className=" grid grid-cols-4 items-center mb-5">
-                        <div className=" col-span-1">
-                            <label for="input-group-1" class="text-[16px] font-medium dark:text-white">Tags</label>
-                        </div>
-                        <div className=" col-span-3">
-                            <input type="text" id="input-group-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2 rounded-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter tags" />
+                    <div className="items-center mb-5">
+                        <div className=" flex flex-col">
+                            <label for="input-group-1" className=" mb-2 text-[16px] text-gray-600 font-medium dark:text-white">Tags</label>
+                            <input type="text" id="input-group-1" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2 rounded-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter tags" />
                         </div>
                     </div>
 
                 </div>
 
-                <div className=" col-span-8 ml-8 ">
-                    <ul class="grid w-full gap-6 grid-cols-3">
+                <div className=" lg:col-span-8 sm:col-span-6 col-span-12 sm:ml-8 ml-0 sm:mt-0 mt-8">
+                    <ul class="grid w-full gap-6 lg:grid-cols-3 grid-cols-1">
                         <li>
                             <input
                                 type="radio"
@@ -357,6 +376,8 @@ function UploadFiles() {
                     theme="light"
                 />
             </div >
+            <Footer />
+
         </>
     );
 }

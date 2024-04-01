@@ -14,6 +14,7 @@ import torch
 from transformers import TrainingArguments,Trainer
 from transformers import BertTokenizer,BertForSequenceClassification
 from dotenv import load_dotenv
+import base64
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True,origins=['http://localhost:5173'])
@@ -54,7 +55,6 @@ def get_speech():
 
 @app.route('/api/process_audio', methods=['POST'])
 def audio_process():
-
     recognizer = sr.Recognizer()
 
     def capture_voice_input():
@@ -76,7 +76,6 @@ def audio_process():
             file_path = temp_file.name
 
         client = OpenAI()
-        
 
         with open(file_path, "rb") as audio_file:
             transcript = client.audio.transcriptions.create(
@@ -84,9 +83,18 @@ def audio_process():
                 file=audio_file
             )
 
-    playsound(file_path)
+        # Encode audio file content as Base64
+        with open(file_path, "rb") as f:
+            audio_content = f.read()
+            encoded_audio = base64.b64encode(audio_content).decode('utf-8')
+
+        response_data = {
+            'message': transcript.text,
+            'audio_file': encoded_audio
+        }
+
     print(transcript.text)
-    return jsonify({'message':transcript.text})
+    return jsonify(response_data)
 
 # Load model and tokenizer
 loaded_model = torch.load('star_rating.pth', map_location=torch.device('cpu'))

@@ -14,6 +14,7 @@ import './styles.css';
 
 import { FreeMode, Mousewheel, Pagination } from 'swiper/modules';
 import axios from "axios";
+import Footer from "../Footer/Footer";
 
 function ProductPage(params) {
 
@@ -169,6 +170,8 @@ function ProductPage(params) {
                     <span className=" text-3xl ms-2">Seminar Modules</span>
                 </h1>
             </div>
+
+            <Footer />
         </>
     );
 }
