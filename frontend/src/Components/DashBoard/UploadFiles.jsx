@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { FaCheckCircle } from "react-icons/fa";
 import ReactAudioPlayer from 'react-audio-player';
 
+
 import Footer from "../Footer/Footer";
 
 function Upload_items(props) {
@@ -377,7 +378,6 @@ function UploadFiles() {
                 />
             </div >
             <Footer />
-
         </>
     );
 }
